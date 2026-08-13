@@ -1,4 +1,4 @@
-# Hey das hier hier ist AI Slop... funktionierender AI Slop!!!
+# Hey das hier ist AI Slop... funktionierender AI Slop!!!
 
 Endlich bekommst du deine Metadaten in deutsch oder französisch oder in welcher Sprache auch immer, vorausgesetzt die Quelle (TMDB) hat sie in deiner gewählten Sprache.
 Mach mit dem Code was du willst, in einer Geschwindigkeit die dir passt und warte nicht darauf das irgendwer, irgendwann mal irgendeine Funktion einbaut. 
@@ -31,6 +31,7 @@ Lies die Datei `METADATEN_SPRACHE_PLAN.md`
 6. Richte Sonarr ein
 7. Bei `Einstellungen/UI/Sprache/Metadaten-Sprache` legst du die gewünschte Sprache fest.
 8. Bei `Einstellungen/Metadatenquelle` gibst du den ganz langen API Key ein und machst das Häkchen an.
+9. Füge deine erste Serie hinzu.
 
 # <img width="24px" src="./Logo/256.png" alt="Sonarr"></img> Sonarr
 
