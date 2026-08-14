@@ -1,0 +1,5 @@
+# Alles ignorieren, nur die Artefakte fürs Image in den Build-Kontext
+*
+!linuxsonarr/**
+!_output/UI/**
+!docker-sonarr/**

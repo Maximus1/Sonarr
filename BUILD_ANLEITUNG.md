@@ -124,20 +124,22 @@ The project targets `net10.0`. For Linux, **RID-specific binaries** are required
 
 ### 3a. Linux x64 (framework-dependent, passt zur LinuxServer-Runtime)
 ```powershell
-dotnet publish src\NzbDrone.Host\Sonarr.Host.csproj `
+dotnet publish src\NzbDrone.Console\Sonarr.Console.csproj `
   -c Release -r linux-x64 --self-contained false -f net10.0 `
   -p:RunAnalyzers=false -o linuxsonarr
 ```
-> **Wichtig // Important:** `-p:RunAnalyzers=false`, weil StyleCop-Analyzer im Release/Publish sonst in bestehenden Dateien fehlschlagen (SA1200 etc.). Der eigentliche Code ist davon nicht betroffen.
+> **Wichtig // Important:**
+> - **Projekt `Sonarr.Console`** – nur dieses erzeugt den ausführbaren **AppHost `Sonarr`** (Entry Point). `Sonarr.Host` hat keinen Entry Point (Fehler `MissingMethodException`)!
+> - `-p:RunAnalyzers=false`, weil StyleCop-Analyzer im Release/Publish sonst in bestehenden Dateien fehlschlagen (SA1200 etc.). Der eigentliche Code ist davon nicht betroffen.
 > **Hinweis // Note:** `--self-contained false` setzt voraus, dass die **gleiche .NET-Runtime** (10.x) auf dem Zielsystem/Container vorhanden ist. Falls der Zielcontainer nur .NET 8 hat, nicht kompatibel → siehe 3b.
 
 ### 3b. Linux x64 (self-contained, enthält die Runtime)
 ```powershell
-dotnet publish src\NzbDrone.Host\Sonarr.Host.csproj `
+dotnet publish src\NzbDrone.Console\Sonarr.Console.csproj `
   -c Release -r linux-x64 --self-contained true -f net10.0 `
   -p:RunAnalyzers=false -o linuxsonarr
 ```
-> Die Runtime ist dann im Output enthalten – unabhängig vom Zielsystem. Größer (~80 MB+), aber robust.
+> Die Runtime ist dann im Output enthalten – unabhängig vom Zielsystem. Größer (~80 MB+), aber robust. **Empfohlen für Docker**, da der Container dann keine .NET-Runtime benötigt.
 
 ### 3c. Frontend für den Container (separat bauen)
 ```powershell
@@ -150,12 +152,12 @@ Ausgabe: `_output\UI\` → für Container nach `/app/sonarr/bin/UI/` kopieren.
 ### EN
 ```bash
 # 3a linux-x64 framework-dependent
-dotnet publish src/NzbDrone.Host/Sonarr.Host.csproj \
+dotnet publish src/NzbDrone.Console/Sonarr.Console.csproj \
   -c Release -r linux-x64 --self-contained false -f net10.0 \
   -p:RunAnalyzers=false -o linuxsonarr
 
 # 3b linux-x64 self-contained
-dotnet publish src/NzbDrone.Host/Sonarr.Host.csproj \
+dotnet publish src/NzbDrone.Console/Sonarr.Console.csproj \
   -c Release -r linux-x64 --self-contained true -f net10.0 \
   -p:RunAnalyzers=false -o linuxsonarr
 
@@ -231,8 +233,8 @@ dotnet restore src/Sonarr.sln
 cd frontend; yarn install; yarn build; cd ..
 dotnet build src/Sonarr.sln -c Release --nologo -v minimal
 
-# Linux (cross-publish)
-dotnet publish src\NzbDrone.Host\Sonarr.Host.csproj -c Release -r linux-x64 --self-contained true -f net10.0 -p:RunAnalyzers=false -o linuxsonarr
+# Linux (cross-publish) – ACHTUNG: Sonarr.Console (nicht Sonarr.Host!)
+dotnet publish src\NzbDrone.Console\Sonarr.Console.csproj -c Release -r linux-x64 --self-contained true -f net10.0 -p:RunAnalyzers=false -o linuxsonarr
 ```
 
 Damit sind alle Schritte abgedeckt – vom Restore über Windows- und Linux-Build bis zur Einbindung in den LinuxServer-Container. / That covers everything from restore over Windows & Linux builds to the LinuxServer container integration.

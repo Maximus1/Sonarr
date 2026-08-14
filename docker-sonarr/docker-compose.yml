@@ -1,0 +1,20 @@
+services:
+  sonarr-tmdb:
+    # Eigenes Image aus diesem Projekt bauen
+    build:
+      context: ..
+      dockerfile: docker-sonarr/Dockerfile
+
+    image: sonarr-tmdb:local
+    container_name: sonarr-tmdb
+
+    ports:
+      - "8989:8989"
+
+    volumes:
+      # Dauerhafte Sonarr-Daten (DB, Konfiguration, Logs)
+      - ./config:/config
+      # Deine Serien (anpassen!)
+      - /pfad/zu/serien:/media/serien
+
+    restart: unless-stopped
