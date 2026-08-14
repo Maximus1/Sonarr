@@ -15,6 +15,10 @@ RUN mkdir -p /config /opt/Sonarr
 # Deine Artefakte: Backend (self-contained, inkl. .NET-Runtime + native .so-Dateien)
 COPY linuxsonarr/ /opt/Sonarr/
 
+# Ausführbare Dateien mit Exec-Bit versehen
+# (COPY von Windows übernimmt kein Exec-Bit! AppHost + native Tools)
+RUN chmod +x /opt/Sonarr/Sonarr /opt/Sonarr/ffprobe /opt/Sonarr/createdump 2>/dev/null || true
+
 # Frontend-Bundle (index.html, JS, CSS)
 COPY _output/UI/ /opt/Sonarr/UI/
 
